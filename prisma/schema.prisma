@@ -1,0 +1,58 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/client"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id             String       @id @default(auto()) @map("_id") @db.ObjectId
+  name           String?
+  email          String?      @unique
+  password       String?
+  hashedPassword String?
+  student_id     String?
+  role           String?
+  class          String?
+  class_id       String?
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  test_result    TestResult[]
+}
+
+model TestResult {
+  id                       String @id @default(auto()) @map("_id") @db.ObjectId
+  user_id                  String @db.ObjectId
+  sdq_stu_aggressive_score Int?
+  sdq_stu_emotional_score  Int?
+  sdq_stu_restless_score   Int?
+  sdq_stu_friends_score    Int?
+  sdq_stu_society_score    Int?
+  sdq_stu_total_score      Int?
+
+  sdq_tea_aggressive_score Int?
+  sdq_tea_emotional_score  Int?
+  sdq_tea_restless_score   Int?
+  sdq_tea_friends_score    Int?
+  sdq_tea_society_score    Int?
+  sdq_tea_total_score      Int?
+
+  sdq_parent_aggressive_score Int?
+  sdq_parent_emotional_score  Int?
+  sdq_parent_restless_score   Int?
+  sdq_parent_friends_score    Int?
+  sdq_parent_society_score    Int?
+  sdq_parent_total_score      Int?
+
+  eq_score Int?
+
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+}
